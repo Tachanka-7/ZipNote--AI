@@ -2,6 +2,8 @@
 
 import { z } from "zod";
 import UploadFormInput from "./upload-form-input";
+import { useUploadThing } from "@/utils/uploadthing";
+import { toast, useSonner } from "sonner"
 
 const schema = z.object({
     file: z.instanceof(File, {message: 'Invalid file'})
@@ -15,7 +17,26 @@ const schema = z.object({
 
 
 export default function UploadForm() {
-  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) =>{
+
+    
+
+   const { startUpload, routeConfig } = useUploadThing("pdfuploader", {
+    onClientUploadComplete: () => {
+      console.log("uploaded successfully!");
+      toast.success("File Uploaded Successfully")
+    },
+    onUploadError: (err) => {
+      console.error("error occurred while uploading",err);
+      toast.error("Error while Uploadig File", {
+        description: err.message
+      })
+    },
+    onUploadBegin: ({ file }) => {
+      console.log("upload has begun for", file);
+    },
+  });
+
+  const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) =>{
     e.preventDefault();
     console.log("submitted");
 
@@ -26,12 +47,33 @@ export default function UploadForm() {
     const validatedFields = schema.safeParse({file});
 
     if(!validatedFields.success){
-        console.log(
-            validatedFields.error.flatten().fieldErrors.file?.[0] ?? 'Invalid File'
-        ); 
+        toast.error('Something Went wrong', {
+          description: validatedFields.error.flatten().fieldErrors.file?.[0] ?? 'Invalid File'
+        })
         return;
     }
 
+    toast.info("Uploading PDF", {
+      description: 'Hang Tight! We are uploading your PDF'
+    })
+    
+    //upload file to uploadThing
+     const respose = await startUpload([file]);
+     if(!respose){
+      toast.error('Something Went Wrong', {
+        description: 'Use a different file'
+      })
+      return;
+     }
+    
+    toast.info("PDF is processing", {
+      description: 'Hang Tight! Our AI is processing the document'
+    })
+
+    //parse the pdf using Lang Chain
+    //summarize the  pdf using AI
+    //save the summary to db
+    //redirect to the [id] summary page
 
 
   }  

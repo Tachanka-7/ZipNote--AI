@@ -92,9 +92,9 @@ export default function UploadForm() {
       });
       
       formRef.current?.reset();
-        // if(data.summary){
+        if(data.summary){
         //save the summary to db
-        // }
+        }
 
 
       }

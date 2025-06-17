@@ -3,6 +3,7 @@
 import { generateSummaryFromGemini } from "@/lib/gemini-ai";
 import { fetchAndExtractPdfText } from "@/lib/langchain";
 import { generateSummaryFromOpenAI } from "@/lib/openai";
+import { auth } from "@clerk/nextjs/server";
 
 export async function generatePdfSummary(uploadResponse: [{
     serverData : {
@@ -78,4 +79,26 @@ export async function generatePdfSummary(uploadResponse: [{
             data: null,
         }        
     }
+}
+
+export async function storePdfSummaryAction(){
+    //check if user is logged in and has a userId
+    //save pdf summary savePdfSummary()
+
+    try {
+        //get userId from clerk
+        const { userId } = await auth()
+        if(!userId){
+            return {
+                success: false,
+                message: 'User not found'
+            }
+        }
+    } catch (error) {
+        return {
+            success:false,
+            message: error instanceof Error ? error.message : 'Error Saving Pdf summary'
+        }
+    }
+
 }

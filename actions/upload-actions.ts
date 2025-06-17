@@ -1,9 +1,19 @@
 'use server'
 
+import { getDbConnection } from "@/lib/db";
 import { generateSummaryFromGemini } from "@/lib/gemini-ai";
 import { fetchAndExtractPdfText } from "@/lib/langchain";
 import { generateSummaryFromOpenAI } from "@/lib/openai";
+import { formatFileNameAsTitle } from "@/utils/format-utils";
 import { auth } from "@clerk/nextjs/server";
+
+interface PdfSummaryType{
+    userId?:string;
+    fileUrl:string; 
+    summary:string; 
+    title:string;
+    fileName:string;
+}
 
 export async function generatePdfSummary(uploadResponse: [{
     serverData : {
@@ -47,7 +57,9 @@ export async function generatePdfSummary(uploadResponse: [{
 
             if(error instanceof Error && error.message === 'RATE_LIMIT_EXCEEDED'){
                 try {
-                    summary = await generateSummaryFromGemini(pdfText);
+                    let notsummary = await generateSummaryFromGemini(pdfText);
+                    summary = notsummary.candidates?.[0]?.content?.parts?.[0]?.text
+
                 } catch (geminiError) {
                     console.error('Gemini AI failed after OpenAI quota exceeded')
                     throw new Error('Failed to generate summary with available AI providers')
@@ -64,11 +76,15 @@ export async function generatePdfSummary(uploadResponse: [{
             }; 
         }
 
+        const formattedFileName = formatFileNameAsTitle(fileName);
+
         return {
             success: true, 
             messsage: 'Summary generated Successfully',
             data: {
-                summary,
+                summary: JSON.stringify(summary),
+                title: formattedFileName,
+                                
             }
         }
 
@@ -81,11 +97,39 @@ export async function generatePdfSummary(uploadResponse: [{
     }
 }
 
-export async function storePdfSummaryAction(){
-    //check if user is logged in and has a userId
-    //save pdf summary savePdfSummary()
+async function savePdfSummary({userId, fileUrl, summary, title, fileName}: PdfSummaryType) {
+    // sql inserting pdf summary
 
     try {
+        const sql = await getDbConnection();
+        await sql`INSERT INTO pdf_summaries(
+            user_id,
+            original_file_url,
+            summary_text,
+            title,
+            file_name
+            ) VALUES (
+                ${userId}, 
+                ${fileUrl},
+                ${summary},
+                ${title},
+                ${fileName}
+            );`;
+    } catch (error) {
+        console.error('Error saving pdf summary',error);
+        throw error;
+    }
+
+    console.log('data stored in db (from savePdfsummary function)')
+}
+
+export async function storePdfSummaryAction({userId, fileUrl, summary, title,   fileName}: PdfSummaryType){
+
+    let savedSummary: any;
+
+    try {
+        //check if user is logged in and has a userId
+
         //get userId from clerk
         const { userId } = await auth()
         if(!userId){
@@ -94,6 +138,22 @@ export async function storePdfSummaryAction(){
                 message: 'User not found'
             }
         }
+
+        //save pdf summary savePdfSummary()
+        savedSummary = await savePdfSummary({userId, fileUrl, summary, title, fileName});
+
+        if(!savedSummary){
+            return {
+            success:false,
+            message: 'Failed to Save Pdf Summary. Try Again.'
+        }
+        }
+
+        return {
+            success:true,
+            message: 'Pdf Summary saved successfully.'
+        }
+
     } catch (error) {
         return {
             success:false,

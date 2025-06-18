@@ -6,6 +6,7 @@ import { fetchAndExtractPdfText } from "@/lib/langchain";
 import { generateSummaryFromOpenAI } from "@/lib/openai";
 import { formatFileNameAsTitle } from "@/utils/format-utils";
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 
 interface PdfSummaryType{
     userId?:string;
@@ -43,6 +44,7 @@ export async function generatePdfSummary(uploadResponse: [{
     }
 
     try {
+        // using langchain to parse pdf
         const pdfText = await fetchAndExtractPdfText(pdfUrl);
         console.log({pdfText})
 
@@ -149,15 +151,21 @@ export async function storePdfSummaryAction({userId, fileUrl, summary, title,   
         }
         }
 
-        return {
-            success:true,
-            message: 'Pdf Summary saved successfully.'
-        }
-
     } catch (error) {
         return {
             success:false,
             message: error instanceof Error ? error.message : 'Error Saving Pdf summary'
+        }
+    }
+
+    //revalidate cache
+    revalidatePath(`/summaries/${savedSummary.id}`);
+
+    return {
+        success:true,
+        message: 'Pdf Summary saved successfully.',
+        data: {
+            id: savedSummary.id
         }
     }
 

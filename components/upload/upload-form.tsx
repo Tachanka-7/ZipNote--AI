@@ -6,6 +6,7 @@ import { useUploadThing } from "@/utils/uploadthing";
 import { toast, useSonner } from "sonner"
 import { generatePdfSummary, storePdfSummaryAction } from "@/actions/upload-actions";
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
     file: z.instanceof(File, {message: 'Invalid file'})
@@ -20,7 +21,8 @@ const schema = z.object({
 
 export default function UploadForm() {
   const [isLoading,setIsLoading] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null)
+  const formRef = useRef<HTMLFormElement>(null);
+  const router = useRouter();
 
   const { startUpload, routeConfig } = useUploadThing("pdfuploader", {
     onClientUploadComplete: () => {
@@ -83,8 +85,7 @@ export default function UploadForm() {
       const result = await generatePdfSummary(response);
 
       const {data = null, message=null} = result || {};
-      
-      
+            
       if(data){
         toast("Saving PDF", {
         description: 'Hang Tight! We are saving your summary'
@@ -103,14 +104,15 @@ export default function UploadForm() {
         toast('Summary Generated', {
           description: 'Your Summary has been successfully summarized & saved!'
         });
-         setIsLoading(false);
+        
+        setIsLoading(false);
         //resetting the form 
         formRef.current?.reset();
 
+        //redirect to the [id] summary page
+        router.push(`/summaries/${storeResult.data.id}`)
       }
       }
-      //summarize the  pdf using AI
-      //redirect to the [id] summary page
 
     } catch (error) {
       setIsLoading(false);

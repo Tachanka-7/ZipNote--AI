@@ -1,4 +1,5 @@
 import BgGradient from "@/components/common/bg-gradient";
+import EmptySummary from "@/components/summaries/empty-summary";
 import SummaryCard from "@/components/summaries/summary-card";
 import { Button } from "@/components/ui/button";
 import { getSummaries } from "@/lib/summaries";
@@ -16,7 +17,8 @@ export default async function DashboardPage() {
     return redirect('/sign-in')
   }
 
-  const summaries = await getSummaries(userId)
+  const summaries = await getSummaries(userId);
+  
     return (
     <main className="min-h-screen">
       <BgGradient className="from-emerald-200 via-teal-200 to-cyan-200"/>
@@ -39,14 +41,16 @@ export default async function DashboardPage() {
                         </Link> for unlimited uploads.
                     </p>
                 </div>
-            </div>
-            <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2  lg:grid-cols-3">
-                {
-                    summaries.map((summary,index)=> (
-                        <SummaryCard key={index} summary={summary}/>
-                    ))
-                }
-            </div>
+            </div>            
+            {summaries.length === 0 ? <EmptySummary/> : 
+                <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2  lg:grid-cols-3">
+                    {
+                        summaries.map((summary,index)=> (
+                            <SummaryCard key={index} summary={summary}/>
+                        ))
+                    }
+                </div>
+            }
         </div>
       </div>
     </main>

@@ -8,6 +8,5 @@ export async function getDbConnection() {
     }
 
     const sql = neon(process.env.DATABASE_URL);
-    console.log('this is the output of connection',sql)
     return sql;
 }

@@ -1,4 +1,6 @@
 import { PizzaIcon } from "lucide-react";
+import SummaryViewer from "../summaries/summary-viewer";
+import { MotionDiv, MotionH3 } from "../common/motion-wrapper";
 
 export default function DemoSection(){
     return <section className="relative">
@@ -18,14 +20,27 @@ export default function DemoSection(){
                     <PizzaIcon className="w-6 h-6 text-rose-500"/>
                 </div>
                 <div className="text-center mb-16">
-                    <h3 className="font-bold text-3xl max-w-2xl mx-auto px-4 sm:px-6">
-                    Watch how ZipNote AI <span className="bg-linear-to-r from-rose-500 to-rose-700 bg-clip-text text-transparent">Transforms this PDF </span>into an easy-to-read summary!
-                    </h3>
+                    <MotionH3 
+                        initial={{y:20, opacity: 0}}
+                        whileInView={{y:0, opacity:1}} 
+                        transition={{duration: 0.5, delay:0.2}}
+                        className="font-bold text-3xl max-w-2xl mx-auto px-4 sm:px-6">
+                        Watch how ZipNote AI{' '}
+                        <span className="bg-linear-to-r from-rose-500 to-rose-700 bg-clip-text text-transparent">Transforms this PDF </span>into an easy-to-read summary!
+                    </MotionH3>
+                </div>
                 </div>
                 <div className="flex justify-center items-center px-2 sm:px-4 lg:px-6">
-                    Summary
+                    <MotionDiv 
+                        initial={{opacity:0}} 
+                        whileInView={{opacity:1}}
+                        transition={{duration:0.5}}
+                        >
+                    {/* <SummaryViewer summary={DEMO_SUMMARY}/> */}
+                    Demo summary here
+                    </MotionDiv>
                 </div>
-            </div>
+            
         </div>
     </section>
 }

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { FileTextIcon } from "lucide-react";
 import { cn, formatFileName } from "@/lib/utils";
 import {formatDistanceToNow} from 'date-fns';
+import { itemVariants } from "@/utils/contants";
+import { MotionDiv } from "../common/motion-wrapper";
 
 const SummaryHeader = ({fileUrl, title, createdAt}: {fileUrl:string, title: string|null, createdAt: string}) => {
     return <div className="flex items-start gap-2 sm:gap-4">
@@ -27,7 +29,12 @@ const StatusBadge = ({status}: {status:string}) => {
 export default function SummaryCard({summary}: {summary:any}) {
     
   return (
-    <div>
+    <MotionDiv 
+        variants={itemVariants} 
+        initial='hidden'
+        animate='visible'
+        whileHover={{scale: 1.02, transition: {duration: 0.2, ease: 'easeOut'}}}
+        className="self-start">
       <Card className="relative h-full">
         <div className="absolute top-2 right-2">
             <DeleteButton summaryId={summary.id} />
@@ -47,6 +54,6 @@ export default function SummaryCard({summary}: {summary:any}) {
             </div>
         </Link>
       </Card>
-    </div>
+    </MotionDiv>
   )
 }

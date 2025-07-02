@@ -23,7 +23,7 @@ export async function generateSummaryFromOpenAI(pdfText:string) {
         })
         return completion.choices[0].message.content;
     } catch (error:any) {
-        console.error("OpenAI error:", error?.status, error?.message, error?.response?.data);
+        // console.error("OpenAI error:", error?.status, error?.message, error?.response?.data);
         if(error?.status === 429){
             throw new Error("RATE_LIMIT_EXCEEDED")
         }

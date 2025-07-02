@@ -12,40 +12,80 @@ interface PdfSummaryType{
     userId?:string;
     fileUrl:string; 
     summary:string; 
-    title:string;
+    title?:string;
     fileName:string;
 }
 
-export async function generatePdfSummary(uploadResponse: [{
-    serverData : {
-        userId:string;
-        file: {
-            url: string;
-            name: string;
-        }
-    }
-}]) {
-    if(!uploadResponse){
+export async function generatePdfText({
+    fileUrl,
+}: {
+    fileUrl: string;
+}){
+    if(!fileUrl){
         return {
             success: false,
             message: 'File Upload Failed',
             data: null,
         }
-    }
-
-    const {serverData : {userId, file : {url: pdfUrl, name: fileName}}} = uploadResponse[0]
-
-    if(!pdfUrl){
-        return {
-            success: false,
-            message: 'File Upload Failed',
-            data: null,
-        };        
     }
 
     try {
         // using langchain to parse pdf
-        const pdfText = await fetchAndExtractPdfText(pdfUrl);
+        const pdfText = await fetchAndExtractPdfText(fileUrl);
+
+        if(!pdfText){
+            return {
+            success: false,
+            message: 'Failed to fetch and Extract PDF Text',
+            data: null,
+            }; 
+        }
+
+        return {
+            success: true, 
+            messsage: 'PDF Text Generated Successfully',
+            data: {
+                pdfText,                                
+            }
+        }
+
+    } catch (error) {
+        return {
+            success: false,
+            message: 'Failed to Fetch and Extract PDF Text',
+            data: null,
+        }        
+    }
+}
+
+// export async function generatePdfSummary(uploadResponse: [{
+//     serverData : {
+//         userId:string;
+//         file: {
+//             url: string;
+//             name: string;
+//         }
+//     }
+// }]) {
+//     if(!uploadResponse){
+//         return {
+//             success: false,
+//             message: 'File Upload Failed',
+//             data: null,
+//         }
+//     }
+
+//     const {serverData : {userId, file : {url: pdfUrl, name: fileName}}} = uploadResponse[0]
+
+export async function generatePdfSummary({
+    pdfText, 
+    fileurl
+}: {
+    pdfText: string;
+    fileurl:string
+}){
+    try {
+        // using langchain to parse pdf       
 
         let summary;
 
@@ -64,8 +104,7 @@ export async function generatePdfSummary(uploadResponse: [{
                 } catch (geminiError) {
                     console.error('Gemini AI failed after OpenAI quota exceeded')
                     throw new Error('Failed to generate summary with available AI providers')
-                }
-                
+                }                
             }
         }
 
@@ -77,14 +116,15 @@ export async function generatePdfSummary(uploadResponse: [{
             }; 
         }
 
-        const formattedFileName = formatFileNameAsTitle(fileName);
+        // const formattedFileName = formatFileNameAsTitle(fileName);
+        // console.log(summary)
 
         return {
             success: true, 
             messsage: 'Summary generated Successfully',
             data: {
-                summary: JSON.stringify(summary),
-                title: formattedFileName,
+                summary,
+                // title: fileName,
                                 
             }
         }
@@ -92,7 +132,7 @@ export async function generatePdfSummary(uploadResponse: [{
     } catch (error) {
         return {
             success: false,
-            message: 'File Upload Failed',
+            message: 'File to Generate Summary',
             data: null,
         }        
     }

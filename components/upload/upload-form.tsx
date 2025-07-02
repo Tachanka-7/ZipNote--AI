@@ -4,9 +4,11 @@ import { z } from "zod";
 import UploadFormInput from "./upload-form-input";
 import { useUploadThing } from "@/utils/uploadthing";
 import { toast, useSonner } from "sonner"
-import { generatePdfSummary, storePdfSummaryAction } from "@/actions/upload-actions";
+import { generatePdfSummary, generatePdfText, storePdfSummaryAction } from "@/actions/upload-actions";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import LoadingSkeleton from "./loading-skeleton";
+import { formatFileNameAsTitle } from "@/utils/format-utils";
 
 const schema = z.object({
     file: z.instanceof(File, {message: 'Invalid file'})
@@ -27,11 +29,11 @@ export default function UploadForm() {
   const { startUpload, routeConfig } = useUploadThing("pdfuploader", {
     onClientUploadComplete: () => {
       console.log("uploaded successfully!");
-      toast.success("File Uploaded Successfully")
+      toast("File Uploaded Successfully")
     },
     onUploadError: (err) => {
       console.error("error occurred while uploading",err);
-      toast.error("Error while Uploadig File", {
+      toast("Error while Uploadig File", {
         description: err.message
       })
     },
@@ -45,8 +47,7 @@ export default function UploadForm() {
     console.log("submitted");
 
     try {
-      setIsLoading(true);
-      
+      setIsLoading(true);      
 
       const formData = new FormData(e.currentTarget);
       const file = formData.get('file') as File;
@@ -55,49 +56,63 @@ export default function UploadForm() {
       const validatedFields = schema.safeParse({file});
 
       if(!validatedFields.success){
-          toast.error('Something Went wrong', {
+          toast('Something Went wrong', {
             description: validatedFields.error.flatten().fieldErrors.file?.[0] ?? 'Invalid File'
           })
           setIsLoading(false);
           return;
       }
 
-      toast.info("Uploading PDF", {
+      toast("Uploading PDF", {
         description: 'Hang Tight! We are uploading your PDF'
       })
       
       //upload file to uploadThing
       const response = await startUpload([file]);
+      
       if(!response){
-      toast.error('Something Went Wrong', {
+      toast('Something Went Wrong', {
         description: 'Use a different file'
       })
         setIsLoading(false);
       return;
       }
       
-      toast.info("PDF is processing", {
+      const fileUrl = response[0].serverData.file.url;
+        
+      const formattedFileName = formatFileNameAsTitle(file.name);
+      
+      const result = await generatePdfText({
+        fileUrl,
+      })
+
+      toast("Generating PDF Summary", {
         description: 'Hang Tight! Our AI is processing the document'
       })
 
+      // call openAI and Gemini here
       //parse the pdf using Lang Chain
-      //@ts-ignore ////////////////////////////////////////////////////
-      const result = await generatePdfSummary(response);
-
-      const {data = null, message=null} = result || {};
-            
-      if(data){
-        toast("Saving PDF", {
-        description: 'Hang Tight! We are saving your summary'
+    
+      // const result = await generatePdfSummary(response);
+      const summaryResult = await generatePdfSummary({
+        pdfText: result.data?.pdfText ?? '', 
+        fileurl: formattedFileName, ///////////////////////////
       });
-              
-      if(data.summary){
+
+       toast('Saving the PDF Summary', {
+          description: 'Your Summary has been successfully summarized & saved!'
+        });
+
+      const {data = null, message = null} = summaryResult || {};
+
+      if(data?.summary){
+        
         let storeResult:any;
         //save the summary to db
         storeResult = await storePdfSummaryAction({
-          summary: String(data.summary), 
-          fileUrl: response[0].serverData.file.url ,
-          title: data.title, 
+          summary: data.summary, 
+          fileUrl,
+          title: formattedFileName, 
           fileName: file.name,
         });
         
@@ -112,8 +127,6 @@ export default function UploadForm() {
         //redirect to the [id] summary page
         router.push(`/summaries/${storeResult.data.id}`)
       }
-      }
-
     } catch (error) {
       setIsLoading(false);
       console.error('Error Occured',error)
@@ -124,7 +137,35 @@ export default function UploadForm() {
     
   return (
     <div className="flex flex-col gap-8 w-full max-w-2xl mx-auto">
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center" aria-hidden='true'>
+          <div className="w-full border-t border-gray-200 dark:border-gray-800"/>
+        </div>
+        <div className="relative flex justify-center">
+          <span className="bg-white/60 px-3 text-muted-foreground text-sm">Upload PDF</span>
+
+        </div>
+      </div>
         <UploadFormInput isLoading={isLoading} ref={formRef} onSubmit={handleSubmit}/>
+
+        {
+          isLoading && (
+            <>
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center" aria-hidden='true'>
+                  <div className="w-full border-t border-gray-200 dark:border-gray-800" />
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="bg-background px-3 text-muted-foreground text-sm">
+                    Processing
+                  </span>
+                </div>
+              </div>
+              <LoadingSkeleton />
+            </>
+          )
+        }
+
     </div>
   )
 }

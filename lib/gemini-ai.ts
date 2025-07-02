@@ -23,7 +23,7 @@ export const generateSummaryFromGemini = async (pdfText: string) => {
             },
         });
         // const result = response.data;
-        console.log(response.candidates?.[0]?.content?.parts?.[0]?.text)
+        // console.log(response.candidates?.[0]?.content?.parts?.[0]?.text)
         if(!response){
             throw new Error('empty response from Gemini')
         }

@@ -7,10 +7,10 @@ import { FileText } from "lucide-react";
 function HeaderSkeleton(){
     return <div className="space-y-4">
         <div className="flex flex-wrap items-center gap-4">
-            <Skeleton className="h-8 w-32 rounded-fullbg-whote/80" />
-            <Skeleton className="h-5 w-40 rounded-fullbg-whote/80" />
+            <Skeleton className="h-8 w-32 rounded-full bg-white/80" />
+            <Skeleton className="h-5 w-40 rounded-full bg-white/80" />
         </div>
-            <Skeleton className="h-12 w-3/4 rounded-fullbg-whote/80" />
+            <Skeleton className="h-12 w-3/4 rounded-full bg-white/80" />
     </div>
 }
 

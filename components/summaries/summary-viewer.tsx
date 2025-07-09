@@ -7,6 +7,7 @@ import ProgressBar from "./progress-bar";
 import { parseSection } from "@/utils/summary-helper";
 import ContentSection from "./content-section";
 import { MotionDiv } from "@/components/common/motion-wrapper";
+import { cn } from "@/lib/utils";
 
 const SectionTitle = ({title}: {title:string}) => {
     return <div className="flex flex-col gap-2 mb-6 sticky top-0 pt-2 pb-4 bg-background/80 backdrop-blur-xs z-10">
@@ -14,7 +15,7 @@ const SectionTitle = ({title}: {title:string}) => {
     </div>
 }
 
-export default function SummaryViewer({summary}: {summary:string}) {
+export default function SummaryViewer({summary, className}: {summary:string, className: string}) {
 
     const[currentSection,setCurrentSection] = useState(0);
 
@@ -24,7 +25,6 @@ export default function SummaryViewer({summary}: {summary:string}) {
         setCurrentSection((prev) => Math.max(prev -1,0))
     }
 
-
     const sections = summary
         .split('\n# ')
         .map((section) => section.trim())
@@ -32,7 +32,7 @@ export default function SummaryViewer({summary}: {summary:string}) {
         .map(parseSection);
 
   return (
-    <Card className="relative px-2 h-[500px] sm:h-[600px] lg:h-[700px] w-full overflow-hidden bg-linear-to-br from background via-background/95 to-rose-500/5 backdrop-blur-lg shadow-2xl rounded-3xl border border-rose-500/10">
+    <Card className={cn("relative px-2 w-3/4 overflow-hidden bg-linear-to-br from background via-background/95 to-rose-500/5 backdrop-blur-lg shadow-2xl rounded-3xl border border-rose-500/10", className)}>
         <ProgressBar sections={sections} currentSection={currentSection}/>
         <MotionDiv key={currentSection} 
             initial={{opacity:0}}

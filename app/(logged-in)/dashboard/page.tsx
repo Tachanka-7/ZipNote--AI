@@ -25,7 +25,7 @@ export default async function DashboardPage() {
   const summaries = await getSummaries(userId);  
     return (
     <main className="min-h-screen">
-      <BgGradient className="from-emerald-200 via-teal-200 to-cyan-200"/>
+      <BgGradient className="from-amber-400 via-red-400 to-amber-400"/>
       <MotionDiv 
         initial={{opacity:0, y:20}}
         animate={{opacity:1, y:0}}

@@ -20,7 +20,6 @@ export default function CTASection(){
                     </div>
                 </div>
             </div>
-            CTA SEction
         </section>
     )
 }

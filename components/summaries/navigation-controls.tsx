@@ -28,7 +28,7 @@ export default function NavigationControls({
                     currentSection === 0 ? 'opacity-50' : 'hover:ng-rose-500/20'
                 )}
                 >
-                    <ChevronLeft className="h-6 w-6"/>
+                    <ChevronLeft className="h-6 w-6 text-white"/>
             </Button>
             <div className="flex gap-2">
                 {Array.from({length: totalSections}).map((_,index) => (
@@ -54,7 +54,7 @@ export default function NavigationControls({
                     currentSection === totalSections - 1 ? 'opacity-50' : 'hover:bg-rose-500/20' 
                 )}
                 >
-                    <ChevronRight className="h-6 w-6"/>
+                    <ChevronRight className="h-6 w-6 text-white"/>
             </Button>
         </div>      
     </div>

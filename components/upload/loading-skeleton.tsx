@@ -1,7 +1,7 @@
 export default function LoadingSkeleton() {
   return (
     <div>
-      LoadingSkeleton
+      Loading Summary....
     </div>
   )
 }

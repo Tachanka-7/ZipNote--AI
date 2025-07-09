@@ -12,7 +12,7 @@ export default function UploadHeader() {
             <Badge variant={"secondary"}
             className="relative px-6 py-2 text-base font-medium bg-white rounded-full group-hover:bg-gray-50 transition-colors">
                 <Sparkles className="h-8 w-8 mr-2 text-rose-600 animate-pulse"/>
-                <p className="text-base">AI-powered Content Creation</p>
+                <p className="text-base">AI-powered PDF Summarization</p>
             </Badge>
         </MotionDiv>
         <MotionDiv 

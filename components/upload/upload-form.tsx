@@ -142,7 +142,7 @@ export default function UploadForm() {
           <div className="w-full border-t border-gray-200 dark:border-gray-800"/>
         </div>
         <div className="relative flex justify-center">
-          <span className="bg-white/60 px-3 text-muted-foreground text-sm">Upload PDF</span>
+          <span className="bg-white/40 px-3 text-muted-foreground text-sm">Upload PDF</span>
 
         </div>
       </div>
@@ -156,7 +156,7 @@ export default function UploadForm() {
                   <div className="w-full border-t border-gray-200 dark:border-gray-800" />
                 </div>
                 <div className="relative flex justify-center">
-                  <span className="bg-background px-3 text-muted-foreground text-sm">
+                  <span className="bg-white/60 px-3 text-muted-foreground text-sm">
                     Processing
                   </span>
                 </div>

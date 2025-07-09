@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { MotionDiv } from "@/components/common/motion-wrapper";
 import { containerVariants } from "@/utils/contants";
 
+export const maxDuration = 60;
 
 export default async function UploadPage() {
   const user = await currentUser();

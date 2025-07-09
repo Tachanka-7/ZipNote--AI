@@ -26,7 +26,7 @@ export default async function SummaryPage(props: {
 
     return (
         <div className="min-h-screen relative isolate bg-linear-to-b from-rose-50/40 to-white">
-            <BgGradient className="from-rose-400 via-rose-300 to-orange-200"/>
+            <BgGradient className="from-amber-300 via-red-200 to-amber-300"/>
             <div className="container mx-auto flex flex-col gap-4">
                 <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-12 lg:py-24">
                     <MotionDiv 
@@ -61,7 +61,7 @@ export default async function SummaryPage(props: {
                                         {word_count?.toLocaleString()} words
                                 </div>
                                 <div className="relative mt-8 sm:mt-6 flex justify-center">
-                                    <SummaryViewer summary={summary.summary_text}/>
+                                    <SummaryViewer className='h-[500px] sm:h-[600px] lg:h-[650px]' summary={summary.summary_text}/>
                                 </div>
                             </div>
                         </MotionDiv>

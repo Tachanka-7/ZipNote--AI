@@ -78,7 +78,7 @@ export default function UploadForm() {
       return;
       }
       
-      const fileUrl = response[0].serverData.file.url;
+      const fileUrl = response[0].serverData.fileUrl;
         
       const formattedFileName = formatFileNameAsTitle(file.name);
       

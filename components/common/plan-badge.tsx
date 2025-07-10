@@ -27,8 +27,7 @@ export default async function PlanBadge(){
     if(plan){
         planName = plan.name;
     }
-    
-    
+        
     return (
         <Badge 
             variant={'outline'}

@@ -32,7 +32,7 @@ export async function handleCheckoutSessionCompleted({
             priceId: priceId as string,
             userEmail: email as string
         });
-    }    
+    } 
 }
 
 async function createOrUpdateUser({

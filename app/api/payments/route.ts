@@ -1,5 +1,4 @@
 import { handleCheckoutSessionCompleted, handleSubscriptionDeleted } from "@/lib/payments";
-import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from 'stripe'
 
@@ -24,7 +23,7 @@ export const POST = async (req:NextRequest) => {
 
             const session = await stripe.checkout.sessions.retrieve(sessionId, {
                 expand: ['line_items'],
-            });
+            },);            
             
             await handleCheckoutSessionCompleted({session, stripe});
 
@@ -58,7 +57,6 @@ export const POST = async (req:NextRequest) => {
     
     return NextResponse.json({
         status: 'success',
-        redirect: "/dashboard"
     })
     
 }

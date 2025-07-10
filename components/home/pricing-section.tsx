@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { containerVariants, itemVariants, listVariant, pricingPlans } from "@/utils/contants";
-import { ArrowRight, CheckIcon } from "lucide-react";
+import { ArrowRight, CheckIcon, InfoIcon } from "lucide-react";
 import Link from "next/link"
 import { MotionDiv } from "../common/motion-wrapper";
 
@@ -42,6 +42,10 @@ const PricingCard = ({name, price, description, items, id, paymentLink}: PriceTy
                         </li>
                     ))}
                 </MotionDiv>
+                <div className="flex gap-2 font-light text-sm">
+                    <InfoIcon className="text-gray-400"/>
+                    <p className="leading-relaxed text-base">For card payment option, use dummy card number: 4242 4242 4242 4242</p>
+                </div>
                 <div className="space-y-2 flex justify-center w-full">
                     <Link 
                         href={paymentLink} 

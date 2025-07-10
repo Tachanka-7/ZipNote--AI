@@ -96,7 +96,7 @@ export default function UploadForm() {
       // const result = await generatePdfSummary(response);
       const summaryResult = await generatePdfSummary({
         pdfText: result.data?.pdfText ?? '', 
-        fileurl: formattedFileName, ///////////////////////////
+        // fileurl: formattedFileName, ///////////////////////////
       });
 
        toast('Saving the PDF Summary', {

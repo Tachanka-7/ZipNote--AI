@@ -78,11 +78,9 @@ export async function generatePdfText({
 //     const {serverData : {userId, file : {url: pdfUrl, name: fileName}}} = uploadResponse[0]
 
 export async function generatePdfSummary({
-    pdfText, 
-    fileurl
+    pdfText
 }: {
     pdfText: string;
-    fileurl:string
 }){
     try {
         // using langchain to parse pdf       

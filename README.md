@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ZipNote AI - Transform PDFs into a beautiful, impactful summaries with the power of AI!
+
+ZipNote AI is a full-stack application that converts your PDF documents into clear, concise summaries enhanced with AI context and emoji-rich formatting.
+
+Built with Next.js 15 App Router, Clerk for Auth, React, OpenAI GPT-4, Gemini, Langchain, ShadcN UI components, Tailwind CSS 4, NeonDB, UploadThing, Stripe for payments, TypeScript, TailwindCSS and more.
+
+! [Project Image](https://www.zip-note-ai.vercel.app/opengraph-image.png)
+
+## Features
+
+### Core Technologies:
+
+- Next.js 15 App Router – Leverages server-side rendering, Server Components, and dynamic routing.
+- React – Powers reusable, interactive UI components.
+- Clerk – Provides secure authentication with support for Passkeys, GitHub, and Google login.
+- OpenAI GPT-4 & Gemini – Generates AI-powered summaries with contextual understanding and emoji-enhanced clarity.
+- Langchain – Handles PDF parsing, text extraction, and document chunking.
+- ShadCN UI – Offers accessible and customizable UI components.
+- NeonDB (PostgreSQL) – Manages serverless storage for user data and summaries.
+- UploadThing – Facilitates secure PDF uploads (up to 32MB) with seamless file handling.
+- Stripe – Manages payments and subscription plans with webhook support.
+- TypeScript – Ensures type safety and improved developer experience.
+- Tailwind CSS 4 – Enables utility-first, responsive, modern styling.
+
+### Application Features:
+
+- Clean, structured summaries with key points and contextual highlights.
+- Interactive summary viewer with progress tracking.
+- Secure file uploads and processing pipeline.
+- Auth-protected routes and server endpoints.
+- Multiple pricing tiers: Basic & Pro.
+- Real-time webhook handling for Stripe events.
+- Personalized user dashboard for summary management.
+- Fully responsive design for mobile and desktop.
+- Real-time updates with path revalidation.
+- Toast notifications for upload status, processing, and errors.
+- Production-optimized deployment.
+- SEO-friendly summary pages.
 
 ## Getting Started
 
-First, run the development server:
+To get started with this project:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. Fork the repository.
+2. Clone your fork.
+3. Install dependencies:
+
+```
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Copy the environment variables into a separate .env file.
+4. Set up required services:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- OpenAI API key
+- Clerk authentication
+- UploadThing configuration
+- Stripe payment setup
+- NeonDB database connection
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+5. Run the development server with 'npm run dev
 
-## Learn More
+## Tech Stack Summary
 
-To learn more about Next.js, take a look at the following resources:
+| Category             | Stack                                             |
+| -------------------- | ------------------------------------------------- |
+| **Frontend**         | Next.js 15, React, Tailwind CSS 4, ShadCN UI      |
+| **Backend**          | Server Components, API Routes, Langchain          |
+| **Authentication**   | Clerk (Passkeys, GitHub, Google OAuth)            |
+| **AI Summarization** | OpenAI GPT-4, Gemini                              |
+| **File Handling**    | UploadThing                                       |
+| **Database**         | NeonDB (PostgreSQL)                               |
+| **Payments**         | Stripe (with webhooks)                            |
+| **Language & Tools** | TypeScript, Vercel (deployment), ESLint, Prettier |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[MIT](https://choosealicense.com/licenses/mit/)

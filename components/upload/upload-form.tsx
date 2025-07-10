@@ -20,6 +20,8 @@ const schema = z.object({
     })
 })
 
+const toastClassname = 'text-black'
+
 
 export default function UploadForm() {
   const [isLoading,setIsLoading] = useState(false);
@@ -34,7 +36,8 @@ export default function UploadForm() {
     onUploadError: (err) => {
       console.error("error occurred while uploading",err);
       toast("Error while Uploadig File", {
-        description: err.message
+        description: err.message,
+        className: toastClassname
       })
     },
     onUploadBegin: ({ file }:any) => {
@@ -57,7 +60,8 @@ export default function UploadForm() {
 
       if(!validatedFields.success){
           toast('Something Went wrong', {
-            description: validatedFields.error.flatten().fieldErrors.file?.[0] ?? 'Invalid File'
+            description: validatedFields.error.flatten().fieldErrors.file?.[0] ?? 'Invalid File',
+          className: toastClassname
           })
           setIsLoading(false);
           return;
@@ -92,15 +96,14 @@ export default function UploadForm() {
 
       // call openAI and Gemini here
       //parse the pdf using Lang Chain
-    
-      // const result = await generatePdfSummary(response);
+
       const summaryResult = await generatePdfSummary({
-        pdfText: result.data?.pdfText ?? '', 
-        // fileurl: formattedFileName, ///////////////////////////
+        pdfText: result.data?.pdfText ?? ''
       });
 
        toast('Saving the PDF Summary', {
-          description: 'Your Summary has been successfully summarized & saved!'
+          description: 'Your Summary has been successfully summarized & saved!',
+          className: toastClassname
         });
 
       const {data = null, message = null} = summaryResult || {};
@@ -117,7 +120,8 @@ export default function UploadForm() {
         });
         
         toast('Summary Generated', {
-          description: 'Your Summary has been successfully summarized & saved!'
+          description: 'Your Summary has been successfully summarized & saved!',
+          className: toastClassname
         });
         
         setIsLoading(false);

@@ -4,8 +4,6 @@ ZipNote AI is a full-stack application that converts your PDF documents into cle
 
 Built with Next.js 15 App Router, Clerk for Auth, React, OpenAI GPT-4, Gemini, Langchain, ShadcN UI components, Tailwind CSS 4, NeonDB, UploadThing, Stripe for payments, TypeScript, TailwindCSS and more.
 
-! [Project Image](https://www.zip-note-ai.vercel.app/opengraph-image.png)
-
 ## Features
 
 ### Core Technologies:

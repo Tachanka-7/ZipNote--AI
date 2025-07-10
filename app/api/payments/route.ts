@@ -1,4 +1,5 @@
 import { handleCheckoutSessionCompleted, handleSubscriptionDeleted } from "@/lib/payments";
+import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from 'stripe'
 
@@ -44,17 +45,20 @@ export const POST = async (req:NextRequest) => {
         default:
         // Unexpected event type
         console.log(`Unhandled event type ${event.type}.`);
+        
         }
       
     } catch (err:any) {
-      console.log(`⚠️  Webhook signature verification failed.`, err.message);
+      console.log(`⚠️ Webhook signature verification failed.`, err.message);
       return NextResponse.json(
         {error: 'Failed to Trigger Webhook', err},
         {status: 400}
         );
     }
-
+    
     return NextResponse.json({
-        status: 'success'
+        status: 'success',
+        redirect: "/dashboard"
     })
+    
 }

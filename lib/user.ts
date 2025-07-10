@@ -15,9 +15,9 @@ export async function hasActivePlan(email:string){
         return query && query.length > 0;
 }
 
-export async function getSubscriptionStatus(user:User) {
+// export async function getSubscriptionStatus(user:User) {
     
-    const hasSubscription = await hasActivePlan(user.emailAddresses[0].emailAddress)
+//     const hasSubscription = await hasActivePlan(user.emailAddresses[0].emailAddress)
 
-    return hasSubscription;
-}
+//     return hasSubscription;
+// }

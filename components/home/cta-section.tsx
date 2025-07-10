@@ -14,8 +14,8 @@ export default function CTASection(){
                         </p>
                     </div>
                     <div>
-                        <Button className="w-full min-[400px]:w-auto bg-linear-to-r from-slate-900 to-rose-500 hover:from-rose-500 hover:to-slate-900 text-white transition-all duration-300" variant={'link'} size="lg">
-                            <Link href="/pricing" className="flex item-center justify-center">Get Started{' '} <ArrowRight className="ml-2 h-4 w-4 animate-pulse"/></Link>
+                        <Button className="w-full min-[400px]:w-auto bg-linear-to-r from-slate-900 to-rose-500 hover:from-rose-500 hover:to-slate-900 text-white transition-all duration-300 hover:no-underline" variant={'link'} size="lg">
+                            <Link href="/sign-in" className="flex item-center justify-center ">Get Started{' '} <ArrowRight className="ml-2 h-4 w-4 animate-pulse"/></Link>
                         </Button>
                     </div>
                 </div>

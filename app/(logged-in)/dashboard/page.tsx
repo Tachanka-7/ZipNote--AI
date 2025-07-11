@@ -14,7 +14,7 @@ import { redirect } from "next/navigation";
 export default async function DashboardPage() {
   
   const user = await currentUser();
-  const userId = user?.id;
+  const userId = user?.emailAddresses[0].emailAddress;
 
   if(!userId){
     return redirect('/sign-in')

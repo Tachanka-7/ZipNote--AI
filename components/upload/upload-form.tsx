@@ -3,7 +3,7 @@
 import { z } from "zod";
 import UploadFormInput from "./upload-form-input";
 import { useUploadThing } from "@/utils/uploadthing";
-import { toast, useSonner } from "sonner"
+import { toast } from "sonner"
 import { generatePdfSummary, generatePdfText, storePdfSummaryAction } from "@/actions/upload-actions";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -20,9 +20,6 @@ const schema = z.object({
     })
 })
 
-const toastClassname = 'text-black'
-
-
 export default function UploadForm() {
   const [isLoading,setIsLoading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -36,8 +33,7 @@ export default function UploadForm() {
     onUploadError: (err) => {
       console.error("error occurred while uploading",err);
       toast("Error while Uploadig File", {
-        description: err.message,
-        className: toastClassname
+        description: err.message
       })
     },
     onUploadBegin: ({ file }:any) => {
@@ -60,24 +56,19 @@ export default function UploadForm() {
 
       if(!validatedFields.success){
           toast('Something Went wrong', {
-            description: validatedFields.error.flatten().fieldErrors.file?.[0] ?? 'Invalid File',
-          className: toastClassname
+            description: validatedFields.error.flatten().fieldErrors.file?.[0] ?? 'Invalid File'
           })
           setIsLoading(false);
           return;
       }
 
-      toast("Uploading PDF", {
-        description: 'Hang Tight! We are uploading your PDF'
-      })
+      toast("Hang Tight! We are uploading your PDF")
       
       //upload file to uploadThing
       const response = await startUpload([file]);
       
       if(!response){
-      toast('Something Went Wrong', {
-        description: 'Use a different file'
-      })
+      toast('Something Went Wrong. Use a different file.')
         setIsLoading(false);
       return;
       }
@@ -90,9 +81,7 @@ export default function UploadForm() {
         fileUrl,
       })
 
-      toast("Generating PDF Summary", {
-        description: 'Hang Tight! Our AI is processing the document'
-      })
+      toast("Generating PDF Summary")
 
       // call openAI and Gemini here
       //parse the pdf using Lang Chain
@@ -101,10 +90,7 @@ export default function UploadForm() {
         pdfText: result.data?.pdfText ?? ''
       });
 
-       toast('Saving the PDF Summary', {
-          description: 'Your Summary has been successfully summarized & saved!',
-          className: toastClassname
-        });
+       toast('Saving the PDF Summary');
 
       const {data = null, message = null} = summaryResult || {};
 
@@ -119,10 +105,7 @@ export default function UploadForm() {
           fileName: file.name,
         });
         
-        toast('Summary Generated', {
-          description: 'Your Summary has been successfully summarized & saved!',
-          className: toastClassname
-        });
+        toast('Your Summary has been successfully summarized & saved!');
         
         setIsLoading(false);
         //resetting the form 
